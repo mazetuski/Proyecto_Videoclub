@@ -241,20 +241,7 @@ public class ComprarRevista extends JDialog implements Rentable{
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
-							if (comprar(Generar.videoclub.getParaComprar(indice))
-									&& eliminar(Generar.videoclub
-											.getParaComprar(indice)) == true) {
-								JOptionPane.showMessageDialog(contentPanel,
-										"Gracias por comprar la Revista: "
-												+ textNombre.getText());
-								actualizar();
-								Ticket ticket = new Ticket();
-								ticket.setVisible(true);
-								// eliminarCompra(Generar.videoclub.getRevistaComprada(0));
-							} else
-								JOptionPane.showMessageDialog(contentPanel,
-										"La Revista no se ha podido comprar",
-										"Error", JOptionPane.ERROR_MESSAGE);
+							comprarRevista();
 						} catch (NoEscritoException e1) {
 							JOptionPane.showMessageDialog(contentPanel,
 									e1.getMessage());
@@ -287,6 +274,7 @@ public class ComprarRevista extends JDialog implements Rentable{
 	 *            revista que se muestra.
 	 */
 	private void mostrar(Producto producto) {
+		okButton.setEnabled(true);
 		textCodigo.setText(producto.getCodigo());
 		textNombre.setText(producto.getNombre());
 		textEuro.setText(producto.getpAlquiler() + "€");
@@ -393,10 +381,10 @@ public class ComprarRevista extends JDialog implements Rentable{
 			textEuro.setText("");
 			textTicket.setText("");
 		}
-		if (Generar.videoclub.sizeParaComprar() == 0) {
-			okButton.setEnabled(false);
-		} else
+		if (Generar.videoclub.sizeParaComprar() == 1) {
 			okButton.setEnabled(true);
+		} else
+			okButton.setEnabled(false);
 		comprobarBoton();
 	}
 
@@ -432,5 +420,21 @@ public class ComprarRevista extends JDialog implements Rentable{
 			textEuro.setText("6€");
 		} else
 			textEuro.setText("4€");
+	}
+	private void comprarRevista() throws NoEscritoException {
+		if (comprar(Generar.videoclub.getParaComprar(indice))
+				&& eliminar(Generar.videoclub
+						.getParaComprar(indice)) == true) {
+			JOptionPane.showMessageDialog(contentPanel,
+					"Gracias por comprar la Revista: "
+							+ textNombre.getText());
+			actualizar();
+			Ticket ticket = new Ticket();
+			ticket.setVisible(true);
+			// eliminarCompra(Generar.videoclub.getRevistaComprada(0));
+		} else
+			JOptionPane.showMessageDialog(contentPanel,
+					"La Revista no se ha podido comprar",
+					"Error", JOptionPane.ERROR_MESSAGE);
 	}
 }

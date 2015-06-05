@@ -247,26 +247,7 @@ public class AñadirVideojuego extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
-							if (Videoclub.Producto.esValida(textCodigo
-									.getText())) {
-								textCodigo.setForeground(Color.BLACK);
-								if (Generar.videoclub.annadir(new Videojuego(
-										textCodigo.getText(), textNombre
-												.getText(), getContenido(), 3,
-										(Empresa) comboBoxEmpresa
-												.getSelectedItem()))) {
-									JOptionPane.showMessageDialog(contentPanel,
-											"Videojuego almacenado con exito.");
-								} else
-									JOptionPane.showMessageDialog(contentPanel,
-											"El videojuego no ha podido almacenarse.",
-											"Error", JOptionPane.ERROR_MESSAGE);
-							} else {
-								textCodigo.setForeground(Color.RED);
-								JOptionPane.showMessageDialog(contentPanel,
-										"Has dejado el código en blanco.",
-										"Error", JOptionPane.ERROR_MESSAGE);
-							}
+							annadirVideojuego();
 						} catch (NoEscritoException e1) {
 							JOptionPane.showMessageDialog(contentPanel,
 									"Hay algún campo inválido.", "Error",
@@ -277,6 +258,8 @@ public class AñadirVideojuego extends JDialog {
 									JOptionPane.ERROR_MESSAGE);
 						}
 					}
+
+					
 				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
@@ -307,5 +290,28 @@ public class AñadirVideojuego extends JDialog {
 			return ContenidoVideojuego.AVENTURA;
 		} else
 			return ContenidoVideojuego.ACCION;
+	}
+	private void annadirVideojuego()
+			throws ProductoExisteException, NoEscritoException {
+		if (Videoclub.Producto.esValida(textCodigo
+				.getText())) {
+			textCodigo.setForeground(Color.BLACK);
+			if (Generar.videoclub.annadir(new Videojuego(
+					textCodigo.getText(), textNombre
+							.getText(), getContenido(), 3,
+					(Empresa) comboBoxEmpresa
+							.getSelectedItem()))) {
+				JOptionPane.showMessageDialog(contentPanel,
+						"Videojuego almacenado con exito.");
+			} else
+				JOptionPane.showMessageDialog(contentPanel,
+						"El videojuego no ha podido almacenarse.",
+						"Error", JOptionPane.ERROR_MESSAGE);
+		} else {
+			textCodigo.setForeground(Color.RED);
+			JOptionPane.showMessageDialog(contentPanel,
+					"Codigo invalido",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

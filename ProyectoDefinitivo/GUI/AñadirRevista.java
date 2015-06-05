@@ -107,12 +107,13 @@ public class AñadirRevista extends JDialog {
 			public void focusGained(FocusEvent arg0) {
 				textCodigo.setForeground(Color.BLACK);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(!Videoclub.Producto.esValida(textCodigo.getText())){
+				if (!Videoclub.Producto.esValida(textCodigo.getText())) {
 					textCodigo.setForeground(Color.RED);
-					}else
-						textCodigo.setForeground(Color.GREEN);
+				} else
+					textCodigo.setForeground(Color.GREEN);
 			}
 		});
 		textCodigo.setColumns(10);
@@ -175,7 +176,9 @@ public class AñadirRevista extends JDialog {
 
 		JPanel panel = new JPanel();
 		panel.setForeground(Color.WHITE);
-		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), null), "Contenido", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,
+				new Color(255, 255, 255), null), "Contenido",
+				TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
 		panel.setBounds(16, 132, 177, 71);
 		contentPanel.add(panel);
 		panel.setLayout(null);
@@ -251,27 +254,7 @@ public class AñadirRevista extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
-							if (Videoclub.Producto.esValida(textCodigo
-									.getText())) {
-							if (Generar.videoclub.annadir(new Revista(textCodigo
-									.getText(), textNombre.getText(),
-									getContenido(), 4,
-									(TituloRevista) comboBoxTemaRevista
-											.getSelectedItem(), textTicket
-											.getText()))) {
-								JOptionPane.showMessageDialog(contentPanel,
-										"Revista almacenada con exito.");
-
-							} else
-								JOptionPane.showMessageDialog(contentPanel,
-										"La Revista no ha podido almacenarse.",
-										"Error", JOptionPane.ERROR_MESSAGE);
-							}else {
-								textCodigo.setForeground(Color.RED);
-								JOptionPane.showMessageDialog(contentPanel,
-										"Has dejado el código en blanco.",
-										"Error", JOptionPane.ERROR_MESSAGE);
-							}
+							annadirRevista(comboBoxTemaRevista);
 						} catch (NoEscritoException e1) {
 							JOptionPane.showMessageDialog(contentPanel,
 									"Hay algún campo inválido.", "Error",
@@ -282,6 +265,7 @@ public class AñadirRevista extends JDialog {
 									JOptionPane.ERROR_MESSAGE);
 						}
 					}
+
 				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
@@ -314,5 +298,26 @@ public class AñadirRevista extends JDialog {
 			return ContenidoRevista.COMIC;
 		} else
 			return ContenidoRevista.MUSICA;
+	}
+
+	private void annadirRevista(final JComboBox comboBoxTemaRevista)
+			throws ProductoExisteException, NoEscritoException {
+		if (Videoclub.Producto.esValida(textCodigo.getText())) {
+			if (Generar.videoclub.annadir(new Revista(textCodigo.getText(),
+					textNombre.getText(), getContenido(), 4,
+					(TituloRevista) comboBoxTemaRevista.getSelectedItem(),
+					textTicket.getText()))) {
+				JOptionPane.showMessageDialog(contentPanel,
+						"Revista almacenada con exito.");
+
+			} else
+				JOptionPane.showMessageDialog(contentPanel,
+						"La Revista no ha podido almacenarse.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+		} else {
+			textCodigo.setForeground(Color.RED);
+			JOptionPane.showMessageDialog(contentPanel, "Codigo invalido",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

@@ -92,10 +92,8 @@ public class Eliminar extends JDialog {
 		label.setForeground(Color.BLACK);
 		label.setBounds(22, 56, 46, 14);
 		contentPanel.add(label);
-		Icon ant = new ImageIcon(this.getClass().getResource(
-				"flechaizq.png"));
-		Icon sig = new ImageIcon(this.getClass().getResource(
-				"flechader.png"));
+		Icon ant = new ImageIcon(this.getClass().getResource("flechaizq.png"));
+		Icon sig = new ImageIcon(this.getClass().getResource("flechader.png"));
 
 		comboBoxAudio = new JComboBox();
 		comboBoxAudio.setEnabled(false);
@@ -115,26 +113,27 @@ public class Eliminar extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
-							if (eliminar(Generar.videoclub.get(indice)) == true) {
-								JOptionPane.showMessageDialog(contentPanel,
-										"El disco se ha eliminado correctamente");
-							} else
-								JOptionPane.showMessageDialog(contentPanel,
-										"El disco no se ha podido eliminar",
-										"Error", JOptionPane.ERROR_MESSAGE);
+							eliminaProducto();
 						} catch (VacioException e1) {
-							JOptionPane.showMessageDialog(contentPanel, "El almacen esta Vacio");
+							JOptionPane.showMessageDialog(contentPanel,
+									"El almacen esta Vacio");
+						} catch (CodigoInvalidoException e1) {
+							JOptionPane.showMessageDialog(contentPanel,
+									e1.getMessage(), "Error",
+									JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				});
-				
+
 				btnMostrar = new JButton("Mostrar");
 				btnMostrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						try {
 							mostrar();
 						} catch (CodigoInvalidoException e) {
-							JOptionPane.showMessageDialog(contentPanel, e.getMessage());
+							JOptionPane.showMessageDialog(contentPanel,
+									e.getMessage(), "Error",
+									JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				});
@@ -155,36 +154,37 @@ public class Eliminar extends JDialog {
 			}
 		}
 		okButton.setEnabled(false);
-		
+
 		comboBoxVideo = new JComboBox();
 		comboBoxVideo.setEnabled(false);
 		comboBoxVideo.setBounds(148, 107, 128, 22);
 		contentPanel.add(comboBoxVideo);
-		
+
 		lblVideo = new JLabel("Video");
 		lblVideo.setForeground(Color.BLACK);
 		lblVideo.setBounds(186, 84, 46, 14);
 		contentPanel.add(lblVideo);
-		
+
 		comboBoxVideojuego = new JComboBox();
 		comboBoxVideojuego.setEnabled(false);
 		comboBoxVideojuego.setBounds(10, 163, 128, 22);
 		contentPanel.add(comboBoxVideojuego);
-		
+
 		lblVideojuego = new JLabel("Videojuego");
 		lblVideojuego.setForeground(Color.BLACK);
 		lblVideojuego.setBounds(47, 140, 66, 14);
 		contentPanel.add(lblVideojuego);
-		
+
 		comboBoxRevista = new JComboBox();
 		comboBoxRevista.setEnabled(false);
 		comboBoxRevista.setBounds(148, 163, 128, 22);
 		contentPanel.add(comboBoxRevista);
-		
+
 		lblRevista = new JLabel("Revista");
 		lblRevista.setForeground(Color.BLACK);
 		lblRevista.setBounds(185, 140, 66, 14);
-		contentPanel.add(lblRevista);;
+		contentPanel.add(lblRevista);
+		;
 		Image img = new ImageIcon(this.getClass().getResource("eliminarcd.jpg"))
 				.getImage();
 	}
@@ -194,10 +194,10 @@ public class Eliminar extends JDialog {
 	 * 
 	 * @param audio
 	 *            audio que se muestra.
-	 * @throws CodigoInvalidoException 
+	 * @throws CodigoInvalidoException
 	 */
 	private void mostrar() throws CodigoInvalidoException {
-		Producto producto=Generar.videoclub.get(textCodigo.getText());
+		Producto producto = Generar.videoclub.get(textCodigo.getText());
 		textNombre.setText(producto.getNombre());
 		textCodigo.setText(producto.getCodigo());
 		okButton.setEnabled(true);
@@ -208,27 +208,29 @@ public class Eliminar extends JDialog {
 			comboBoxRevista.removeAllItems();
 			comboBoxAudio.addItem(((Audio) producto).getContenido());
 			comboBoxAudio.setSelectedItem(((Audio) producto).getContenido());
-		}else if(producto.tipo==2){
+		} else if (producto.tipo == 2) {
 			comboBoxAudio.removeAllItems();
 			comboBoxVideo.setVisible(true);
 			comboBoxVideojuego.removeAllItems();
 			comboBoxRevista.removeAllItems();
 			comboBoxVideo.addItem(((Video) producto).getContenido());
 			comboBoxVideo.setSelectedItem(((Video) producto).getContenido());
-		}else if(producto.tipo==3){
+		} else if (producto.tipo == 3) {
 			comboBoxVideojuego.setVisible(true);
 			comboBoxAudio.removeAllItems();
 			comboBoxVideo.removeAllItems();
 			comboBoxRevista.removeAllItems();
 			comboBoxVideojuego.addItem(((Videojuego) producto).getContenido());
-			comboBoxVideojuego.setSelectedItem(((Videojuego) producto).getContenido());
-		}else if(producto.tipo==4){
+			comboBoxVideojuego.setSelectedItem(((Videojuego) producto)
+					.getContenido());
+		} else if (producto.tipo == 4) {
 			comboBoxVideojuego.removeAllItems();
 			comboBoxAudio.removeAllItems();
 			comboBoxVideo.removeAllItems();
 			comboBoxRevista.setVisible(true);
 			comboBoxRevista.addItem(((Revista) producto).getContenido());
-			comboBoxRevista.setSelectedItem(((Revista) producto).getContenido());
+			comboBoxRevista
+					.setSelectedItem(((Revista) producto).getContenido());
 		}
 	}
 
@@ -239,9 +241,32 @@ public class Eliminar extends JDialog {
 	 *            audio que se elimina.
 	 * 
 	 * @return Devuelve la eliminaci&oacute;n del audio.
-	 * @throws VacioException 
+	 * @throws VacioException
 	 */
 	private boolean eliminar(Producto producto) throws VacioException {
-		return Generar.videoclub.eliminarProducto(producto, textCodigo.getText());
+		return Generar.videoclub.eliminarProducto(producto,
+				textCodigo.getText());
+	}
+
+	private void actualiza() {
+		comboBoxVideojuego.removeAllItems();
+		comboBoxAudio.removeAllItems();
+		comboBoxVideo.removeAllItems();
+		comboBoxRevista.removeAllItems();
+		textNombre.setText("");
+		textCodigo.setText("");
+		okButton.setEnabled(false);
+	}
+
+	private void eliminaProducto() throws VacioException,
+			CodigoInvalidoException {
+		if (eliminar(Generar.videoclub.get(textCodigo.getText()))) {
+			JOptionPane.showMessageDialog(contentPanel,
+					"El disco se ha eliminado correctamente");
+			actualiza();
+		} else
+			JOptionPane.showMessageDialog(contentPanel,
+					"El disco no se ha podido eliminar", "Error",
+					JOptionPane.ERROR_MESSAGE);
 	}
 }

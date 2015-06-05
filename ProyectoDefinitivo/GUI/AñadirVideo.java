@@ -146,7 +146,9 @@ public class AñadirVideo extends JDialog {
 		JPanel panel = new JPanel();
 		panel.setForeground(Color.BLACK);
 		panel.setLayout(null);
-		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), null), "Contenido", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,
+				new Color(255, 255, 255), null), "Contenido",
+				TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
 
 		panel.setBounds(10, 106, 244, 45);
 		contentPanel.add(panel);
@@ -156,7 +158,7 @@ public class AñadirVideo extends JDialog {
 		buttonGroup.add(rdbtnPelicula);
 		rdbtnPelicula.setSelected(true);
 		rdbtnPelicula.setBounds(6, 16, 77, 23);
-		
+
 		panel.add(rdbtnPelicula);
 
 		rdbtnSerie = new JRadioButton("Serie");
@@ -170,7 +172,6 @@ public class AñadirVideo extends JDialog {
 		buttonGroup.add(rdbtnCorto);
 		rdbtnCorto.setBounds(156, 16, 77, 23);
 		panel.add(rdbtnCorto);
-
 
 		comboBoxDirector = new JComboBox();
 		imgDirector = new ImageIcon(this.getClass().getResource(
@@ -235,26 +236,7 @@ public class AñadirVideo extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
-							if (Videoclub.Producto.esValida(textCodigo
-									.getText())) {
-								if (Generar.videoclub.annadir(new Video(
-										textCodigo.getText(), textNombre
-												.getText(), getContenido(), 2,
-										(Director) comboBoxDirector
-												.getSelectedItem()))) {
-									JOptionPane.showMessageDialog(contentPanel,
-											"Video almacenado con exito.");
-								} else {
-									textCodigo.setForeground(Color.RED);
-									JOptionPane.showMessageDialog(contentPanel,
-											"El Video no ha podido almacenarse.",
-											"Error", JOptionPane.ERROR_MESSAGE);
-								}
-
-							} else
-								JOptionPane.showMessageDialog(contentPanel,
-										"Has dejado el código en blanco.",
-										"Error", JOptionPane.ERROR_MESSAGE);
+							annadirVideo();
 						} catch (NoEscritoException e1) {
 							JOptionPane.showMessageDialog(contentPanel,
 									"Hay algún campo inválido.", "Error",
@@ -295,5 +277,25 @@ public class AñadirVideo extends JDialog {
 			return ContenidoVideo.SERIE;
 		} else
 			return ContenidoVideo.CORTO;
+	}
+
+	private void annadirVideo() throws ProductoExisteException,
+			NoEscritoException {
+		if (Videoclub.Producto.esValida(textCodigo.getText())) {
+			if (Generar.videoclub.annadir(new Video(textCodigo.getText(),
+					textNombre.getText(), getContenido(), 2,
+					(Director) comboBoxDirector.getSelectedItem()))) {
+				JOptionPane.showMessageDialog(contentPanel,
+						"Video almacenado con exito.");
+			} else {
+				textCodigo.setForeground(Color.RED);
+				JOptionPane.showMessageDialog(contentPanel,
+						"El Video no ha podido almacenarse.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+
+		} else
+			JOptionPane.showMessageDialog(contentPanel, "Código Invalido.",
+					"Error", JOptionPane.ERROR_MESSAGE);
 	}
 }

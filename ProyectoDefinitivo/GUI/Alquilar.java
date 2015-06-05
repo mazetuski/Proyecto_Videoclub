@@ -206,16 +206,7 @@ public class Alquilar extends JDialog implements Rentable, Fechable,
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
-							if (alquilar(Generar.videoclub.getParaAlquilar(indice))
-									&& eliminar(Generar.videoclub.getParaAlquilar(indice))) {
-								JOptionPane
-										.showMessageDialog(contentPanel,
-												"El disco se ha alquilado correctamente");
-								actualizar();
-							} else
-								JOptionPane.showMessageDialog(contentPanel,
-										"El disco no se ha podido alquilar",
-										"Error", JOptionPane.ERROR_MESSAGE);
+							alquilarUnProducto();
 						} catch (NoEscritoException e1) {
 							JOptionPane.showMessageDialog(contentPanel,
 									e1.getMessage());
@@ -432,10 +423,10 @@ public class Alquilar extends JDialog implements Rentable, Fechable,
 			textEuro.setText("");
 			comboBoxEntrega.setVisible(false);
 		}
-		if (Generar.videoclub.sizeParaAlquilar() == 0) {
-			okButton.setEnabled(false);
-		} else
+		if (Generar.videoclub.sizeParaAlquilar() == 1) {
 			okButton.setEnabled(true);
+		} else
+			okButton.setEnabled(false);
 		comprobarBoton();
 	}
 
@@ -517,5 +508,18 @@ public class Alquilar extends JDialog implements Rentable, Fechable,
 					precioAlquiler = precio(), ((Videojuego) producto)
 							.getEmpresa()));
 		}
+	}
+	private void alquilarUnProducto()
+			throws NoEscritoException, VacioException {
+		if (alquilar(Generar.videoclub.getParaAlquilar(indice))
+				&& eliminar(Generar.videoclub.getParaAlquilar(indice))) {
+			JOptionPane
+					.showMessageDialog(contentPanel,
+							"El disco se ha alquilado correctamente");
+			actualizar();
+		} else
+			JOptionPane.showMessageDialog(contentPanel,
+					"El disco no se ha podido alquilar",
+					"Error", JOptionPane.ERROR_MESSAGE);
 	}
 }

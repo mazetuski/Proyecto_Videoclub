@@ -191,21 +191,7 @@ public class Devolver extends JDialog implements Descontable {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
-							if (annadirAux(Generar.videoclub
-									.getAlquilados(indice))
-									&& eliminar(Generar.videoclub
-											.getAlquilados(indice)) == true) {
-								devolverAudio(Generar.videoclub.getAux(0));
-								eliminarAux(Generar.videoclub.getAux(0));
-								JOptionPane
-										.showMessageDialog(contentPanel,
-												"El disco se ha devuelto correctamente");
-								actualizar();
-
-							} else
-								JOptionPane.showMessageDialog(contentPanel,
-										"El disco no se ha podido devolver",
-										"Error", JOptionPane.ERROR_MESSAGE);
+							devolverProducto();
 
 						} catch (NoEscritoException e1) {
 							JOptionPane.showMessageDialog(contentPanel,
@@ -239,6 +225,7 @@ public class Devolver extends JDialog implements Descontable {
 	 *            audio que se muestra.
 	 */
 	private void mostrar(Producto producto) {
+		okButton.setEnabled(true);
 		textCodigo.setText(producto.getCodigo());
 		textNombre.setText(producto.getNombre());
 		fechaEntrega = (producto.getDiasAlquiler());
@@ -384,10 +371,10 @@ public class Devolver extends JDialog implements Descontable {
 			textEntrega.setText("");
 			textEuro.setText("");
 		}
-		if (Generar.videoclub.sizeAlquilados() == 0) {
-			okButton.setEnabled(false);
-		} else
+		if (Generar.videoclub.sizeAlquilados() == 1) {
 			okButton.setEnabled(true);
+		} else
+			okButton.setEnabled(false);
 		comprobarBoton();
 	}
 
@@ -430,5 +417,22 @@ public class Devolver extends JDialog implements Descontable {
 		} else
 			precioAlquiler = precioAlquiler;
 		return precioAlquiler;
+	}
+	private void devolverProducto() throws NoEscritoException {
+		if (annadirAux(Generar.videoclub
+				.getAlquilados(indice))
+				&& eliminar(Generar.videoclub
+						.getAlquilados(indice)) == true) {
+			devolverAudio(Generar.videoclub.getAux(0));
+			eliminarAux(Generar.videoclub.getAux(0));
+			JOptionPane
+					.showMessageDialog(contentPanel,
+							"El disco se ha devuelto correctamente");
+			actualizar();
+
+		} else
+			JOptionPane.showMessageDialog(contentPanel,
+					"El disco no se ha podido devolver",
+					"Error", JOptionPane.ERROR_MESSAGE);
 	}
 }

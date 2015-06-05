@@ -96,14 +96,15 @@ public class AñadirAudio extends JDialog {
 			public void focusGained(FocusEvent arg0) {
 				textCodigo.setForeground(Color.BLACK);
 			}
+
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(!Videoclub.Producto.esValida(textCodigo.getText())){
-				textCodigo.setForeground(Color.RED);
-				}else
+				if (!Videoclub.Producto.esValida(textCodigo.getText())) {
+					textCodigo.setForeground(Color.RED);
+				} else
 					textCodigo.setForeground(Color.GREEN);
 			}
-				
+
 		});
 		textCodigo.setBounds(108, 30, 86, 20);
 		contentPanel.add(textCodigo);
@@ -120,8 +121,10 @@ public class AñadirAudio extends JDialog {
 		textNombre.setColumns(10);
 
 		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), null), "Contenido", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
-		
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,
+				new Color(255, 255, 255), null), "Contenido",
+				TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
+
 		panel.setBounds(26, 115, 255, 45);
 		contentPanel.add(panel);
 		panel.setLayout(null);
@@ -138,14 +141,12 @@ public class AñadirAudio extends JDialog {
 		rdbtnNarracin.setBounds(81, 16, 89, 23);
 		panel.add(rdbtnNarracin);
 		buttonGroup.add(rdbtnNarracin);
-		
 
 		rdbtnIdioma = new JRadioButton("Idioma\r\n");
 		rdbtnIdioma.setForeground(Color.BLACK);
 		rdbtnIdioma.setBounds(172, 16, 77, 23);
 		panel.add(rdbtnIdioma);
 		buttonGroup.add(rdbtnIdioma);
-	
 
 		JLabel lblAutor = new JLabel("Autor");
 		lblAutor.setForeground(Color.WHITE);
@@ -156,12 +157,12 @@ public class AñadirAudio extends JDialog {
 		textAutor.setBounds(108, 86, 86, 20);
 		contentPanel.add(textAutor);
 		textAutor.setColumns(10);
-		
+
 		JLabel label = new JLabel("");
 		label.setBounds(0, 0, 300, 195);
 		contentPanel.add(label);
-		Image img = new ImageIcon(this.getClass().getResource(
-				"cd.jpg")).getImage();
+		Image img = new ImageIcon(this.getClass().getResource("cd.jpg"))
+				.getImage();
 		label.setIcon(new ImageIcon(img));
 
 		{
@@ -173,34 +174,18 @@ public class AñadirAudio extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
-							if (Videoclub.Producto.esValida(textCodigo.getText())) {
-								textCodigo.setForeground(Color.BLACK);
-								if (Generar.videoclub.annadir(new Audio(
-										textCodigo.getText(),
-										textNombre.getText(), getContenido(),
-										1, textAutor.getText()))) {
-									JOptionPane.showMessageDialog(contentPanel,
-											"CD almacenado con exito.");
-
-								} else
-									JOptionPane.showMessageDialog(contentPanel,
-											"El CD no ha podido almacenarse.",
-											"Error", JOptionPane.ERROR_MESSAGE);
-							}else {
-								textCodigo.setForeground(Color.RED);    
-								JOptionPane.showMessageDialog(contentPanel,
-										"Has dejado el código en blanco.",
-										"Error", JOptionPane.ERROR_MESSAGE);
-							}
+							annadirAudio();
 						} catch (NoEscritoException e1) {
-							JOptionPane.showMessageDialog(contentPanel,"Hay algún campo inválido.",
-									"Error", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(contentPanel,
+									"Hay algún campo inválido.", "Error",
+									JOptionPane.ERROR_MESSAGE);
 						} catch (ProductoExisteException e1) {
 							JOptionPane.showMessageDialog(contentPanel,
 									e1.getMessage(), "Error",
 									JOptionPane.ERROR_MESSAGE);
 						}
 					}
+
 				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
@@ -231,5 +216,27 @@ public class AñadirAudio extends JDialog {
 			return ContenidoAudio.IDIOMA;
 		} else
 			return ContenidoAudio.NARRACION;
+	}
+
+	private void annadirAudio() throws ProductoExisteException,
+			NoEscritoException {
+		if (Videoclub.Producto.esValida(textCodigo.getText())) {
+			textCodigo.setForeground(Color.BLACK);
+			if (Generar.videoclub.annadir(new Audio(textCodigo.getText(),
+					textNombre.getText(), getContenido(), 1, textAutor
+							.getText()))) {
+				JOptionPane.showMessageDialog(contentPanel,
+						"CD almacenado con exito.");
+
+			} else
+				JOptionPane.showMessageDialog(contentPanel,
+						"El CD no ha podido almacenarse.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+		} else {
+			textCodigo.setForeground(Color.RED);
+			JOptionPane.showMessageDialog(contentPanel,
+					"Codigo invalido", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }
