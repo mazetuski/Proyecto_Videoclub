@@ -115,6 +115,8 @@ public class Alquilar extends JDialog implements Rentable, Fechable,
 	private JLabel label_3;
 	private JLabel label_4;
 	private JComboBox comboBoxVideojuego;
+	private SimpleDateFormat sdf;
+	private String str;
 
 	/**
 	 * Crea el Dialogo.
@@ -246,8 +248,8 @@ public class Alquilar extends JDialog implements Rentable, Fechable,
 		textFecha.setBounds(88, 42, 111, 20);
 		contentPanel.add(textFecha);
 		textFecha.setColumns(10);
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		String str = sdf.format(Generar.videoclub.getDiasAlquiler().getTime());
+		sdf = new SimpleDateFormat("dd/MM/yyyy");
+		str = sdf.format(Generar.videoclub.getDiasAlquiler().getTime());
 		textFecha.setText(str);
 
 		JLabel lblEntrega = new JLabel("Entrega");
@@ -315,6 +317,9 @@ public class Alquilar extends JDialog implements Rentable, Fechable,
 		textNombre.setText(producto.getNombre());
 		textCodigo.setText(producto.getCodigo());
 		okButton.setEnabled(true);
+		comboBoxEntrega.setVisible(true);
+		textFecha.setText(str);
+		textEuro.setText("8€");
 		if (producto.tipo == 1) {
 			comboBoxAudio.setVisible(true);
 			comboBoxVideo.removeAllItems();
